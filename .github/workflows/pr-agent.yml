@@ -7,19 +7,30 @@ on:
 jobs:
   review:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v3
+      - name: Gerar token do GitHub App
+        id: app-token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}               # ID do GitHub App
+          private_key: ${{ secrets.APP_PRIVATE_KEY }} # Chave privada do App
+
+      - name: Checkout código (sem persistir o token)
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Disparar PR‑Agent via HTTP
         env:
           REPO: https://github.com/${{ github.repository }}.git
           PR: ${{ github.event.pull_request.number }}
-          TOKEN: ${{ github.token }}
-          AGENT_URL: https://484b-204-199-57-14.ngrok-free.app/analyze
+          TOKEN: ${{ steps.app-token.outputs.token }}
+          AGENT_URL: https://teu-servidor.com/analyze
         run: |
-          echo "🔔 Chamando PR‑Agent para o PR #${PR} em ${REPO}..."
-          echo "🔑 Token do GitHub: ${TOKEN}"
+          echo "🔔 Chamando PR‑Agent para o PR #${PR}..."
           curl -sSL \
             -X POST "$AGENT_URL" \
             -H "Content-Type: application/json" \
@@ -31,6 +42,4 @@ jobs:
           | tee pr_agent_response.json
 
       - name: Mostrar resposta do PR‑Agent
-        run: |
-          echo "📋 Feedback do agente:"
-          cat pr_agent_response.json
+        run: cat pr_agent_response.json
