@@ -1,0 +1,35 @@
+name: PR Review Bot
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Disparar PR‑Agent via HTTP
+        env:
+          REPO: https://github.com/${{ github.repository }}.git
+          PR: ${{ github.event.pull_request.number }}
+          AGENT_URL: https://seu-endpoint-pr-agent.example.com/review
+          AGENT_TOKEN: ${{ secrets.PR_AGENT_TOKEN }}
+        run: |
+          echo "🔔 Chamando PR‑Agent para o PR #${PR} em ${REPO}..."
+          curl -sSL \
+            -X POST "$AGENT_URL" \
+            -H "Authorization: Bearer $AGENT_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "repo_url": "'"${REPO}"'",
+                  "pr_number": '"${PR}"'
+                }' \
+          | tee pr_agent_response.json
+
+      - name: Mostrar resposta do PR‑Agent
+        run: |
+          echo "📋 Feedback do agente:"
+          cat pr_agent_response.json
