@@ -1,18 +1,18 @@
-name: PR Review Bot
+# name: PR Review Bot
 
-on:
-  pull_request:
-    types: [opened, synchronize]
+# on:
+#   pull_request:
+#     types: [opened, synchronize]
 
-jobs:
-  review:
-    runs-on: ubuntu-latest
+# jobs:
+#   review:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Gerar token do GitHub App
-        id: app-token
-        uses: tibdex/github-app-token@v2
-        with:
-          app_id: ${{ secrets.APP_ID }}               # ID do GitHub App
-          private_key: ${{ secrets.APP_PRIVATE_KEY }} # Chave privada do App
+#     steps:
+#       - name: Gerar token do GitHub App
+#         id: app-token
+#         uses: tibdex/github-app-token@v2
+#         with:
+#           app_id: ${{ secrets.APP_ID }}               # ID do GitHub App
+#           private_key: ${{ secrets.APP_PRIVATE_KEY }} # Chave privada do App
 
