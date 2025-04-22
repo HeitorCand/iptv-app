@@ -16,16 +16,14 @@ jobs:
           REPO: https://github.com/${{ github.repository }}.git
           PR: ${{ github.event.pull_request.number }}
           AGENT_URL: https://484b-204-199-57-14.ngrok-free.app/analyze
-          AGENT_TOKEN: ${{ secrets.PR_AGENT_TOKEN }}
         run: |
           echo "🔔 Chamando PR‑Agent para o PR #${PR} em ${REPO}..."
           curl -sSL \
             -X POST "$AGENT_URL" \
-            -H "Authorization: Bearer $AGENT_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{
                   "repo_url": "'"${REPO}"'",
-                  "pr_number": '"${PR}"'
+                  "pr_number": '"${PR}"',
                 }' \
           | tee pr_agent_response.json
 
