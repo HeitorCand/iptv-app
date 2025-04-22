@@ -15,6 +15,7 @@ jobs:
         env:
           REPO: https://github.com/${{ github.repository }}.git
           PR: ${{ github.event.pull_request.number }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AGENT_URL: https://484b-204-199-57-14.ngrok-free.app/analyze
         run: |
           echo "🔔 Chamando PR‑Agent para o PR #${PR} em ${REPO}..."
@@ -24,6 +25,7 @@ jobs:
             -d '{
                   "repo_url": "'"${REPO}"'",
                   "pr_number": '"${PR}"',
+                  "github_token": "'"${TOKEN}"'",
                 }' \
           | tee pr_agent_response.json
 
