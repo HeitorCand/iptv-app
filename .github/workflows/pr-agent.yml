@@ -26,7 +26,7 @@ jobs:
             -d '{
                   "repo_url": "'"${REPO}"'",
                   "pr_number": '"${PR}"',
-                  "github_token": '"${TOKEN}"'
+                  "github_token": "'"${TOKEN}"'"
                 }' \
           | tee pr_agent_response.json
 
