@@ -19,13 +19,14 @@ jobs:
           AGENT_URL: https://484b-204-199-57-14.ngrok-free.app/analyze
         run: |
           echo "🔔 Chamando PR‑Agent para o PR #${PR} em ${REPO}..."
+          echo "🔑 Token do GitHub: ${TOKEN}"
           curl -sSL \
             -X POST "$AGENT_URL" \
             -H "Content-Type: application/json" \
             -d '{
                   "repo_url": "'"${REPO}"'",
                   "pr_number": '"${PR}"',
-                  "github_token": '"${TOKEN}"',
+                  "github_token": '"${TOKEN}"'
                 }' \
           | tee pr_agent_response.json
 
